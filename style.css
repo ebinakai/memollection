@@ -1,0 +1,329 @@
+/* 全体設計 */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+
+div.wrapper {
+    width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+div.main {
+    width: 1000px;
+    min-height: 350px;
+    max-height: 100%;
+    font-size: 16px;
+    margin: 0 auto;
+}
+div.main h2 {
+    font-size: 40px;
+    width: 1000px;
+    display: inline-block;
+    margin-top: 150px;
+}
+section,
+div.main form {
+    margin: 0 auto;
+}
+div.main form input#submit:hover,
+div#input_right button:hover,
+button#logout:hover
+ {
+    background-color: #4888c4;
+}
+.on_cursor:hover {
+    cursor: pointer;
+}
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+textarea {
+    border: none;
+    resize: none;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* ヘッダー */
+
+header {
+    width: 1000px;
+    height: auto;
+    padding-top: 100px;
+}
+div#post header {
+    padding-top: 0;
+}
+a {
+    color: #444;
+    text-decoration: none;
+}
+header h1,
+div.main h2 {
+    text-align: center;
+    font-weight: bold;
+}
+header h1 {
+    font-size: 50px;
+    padding-top: 75px;
+}
+header button#logout {
+    position: absolute;
+    top: 65px;
+    right: 65px;
+    width: 120px;
+    height: 55px;
+    font-size: 22px;
+    color: #fff;
+    background-color: #59A6F0;
+    border: none;
+    border-radius: 10px;
+}
+
+/* ログインフォーム */
+
+div.main form.user_info {
+    width: 500px; 
+    height: 350px;
+    text-align: center;
+}
+div.main form input#username_field,
+div.main form input#pw_field {
+    width: 290px;
+    height: 30px;
+    text-align: center;
+    border-radius: 20px;
+}
+input#username_field{
+    margin-top: 150px;
+}
+input#pw_field {
+    margin-top: 20px;
+}
+div.main form input#submit {
+    width: 270px;
+    height: 40px;
+    background-color: #59A6F0;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 60px;
+}
+
+/* メインページ */
+
+section#post_area {
+    height: calc(100vh - 420px);
+    width: 80%;
+    min-height: 350px;
+    margin-top: 30px;
+    width: 80%;
+    border-radius: 10px;
+    overflow-y: scroll;
+    border: 2px solid rgba(89, 166, 240, 0.8);
+    margin: 20px auto 0 auto;
+    border-radius: 20px;
+}
+section::-webkit-scrollbar {
+    display:none;
+}
+section#post_area p.date {
+    display: block;
+    text-align: center;
+    height: 30px;
+    margin: 20px 0;
+}
+section#post_area p.date span {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+    border-radius: 15px;
+    background-color: #f7f7f7;
+}
+section#msg_area 
+section#post_area div {
+    height: auto;
+    margin: 10px;
+}
+section#post_area div{
+    margin: 0 20px;
+}
+section#post_area div p {
+    max-width: 600px;
+    overflow-wrap:  break-word;
+    font-size: 16px;
+    line-height: 26px;
+    color: #444;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    position: relative;
+    margin-bottom: 10px;
+}
+section#post_area div.right_box,
+section#post_area div.right_box form#post_edit {
+    text-align: right;
+}
+section#post_area div.right_box p,
+section#post_area div.left_box form#post_edit {
+    text-align: left;
+}
+form#post_edit {
+    height: auto;
+    width: 100%;
+    display: none;
+}
+form#post_edit textarea{
+    background-color: #EEE;
+    width: 80%;
+}
+form#post_edit button.edit_cancel,
+form#post_edit button.delete,
+form#post_edit input.edit{
+    width: 16%;
+    height: 40px;
+    font-size: 18px;
+    border: none;
+    margin: 30px 8%;
+    border-radius: 7px;
+}
+form#post_edit button.edit_cancel {
+    color: black;
+    margin-left: 2%;
+}
+form#post_edit button.delete {
+    color: red;
+}
+form#post_edit input.edit{
+    color: white;
+    font-weight: bold;
+    background-color: #59A6F0;
+    margin-right: 2%;
+}
+span.time {
+    display: inline-block;
+    margin: 10px 5px;
+}
+div.main form#post_input {
+    width: 75%;
+}
+div.main form#post_input {
+    height: 150px;
+    margin-top: 30px;
+}
+div#input_left,
+div#input_right {
+    float: left;
+    height: 130px;
+}
+div#input_left {
+    width: 80%;
+}
+div#input_right {
+    width: 20%;
+    text-align: right;
+}
+div#input_left textarea {
+    width: 95%;
+    height: 26px;
+    font-size: 16px;
+    border: none;
+    resize: none;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 17px;
+    background-color: #EEE;
+}
+div#input_left textarea:focus {
+    outline: 1px solid #999;
+}
+div#input_right input {
+    background-color: #59A6F0;
+    width: 80px;
+    height: 40px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 7px;
+    margin-top: 30px;
+}
+
+/* フッター */
+
+footer{
+    text-align: center;
+    font-size: 15px;
+    height: 30px;
+    margin-top: 50px;
+}
+
+/* モーダル */
+
+.del_modal{
+    display: none;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.modal_bg{
+    background: rgba(0,0,0,0.3);
+    height: 100vh;
+    position: absolute;
+    width: 100%;
+}
+.modal_content{
+    background: #fff;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 40%;
+    height: auto;
+    min-width: 250px;
+    min-height: 100px;
+    border-radius: 20px;
+    color: #444;
+}
+.modal_content p {
+    font-size: 25px;
+    text-align: center;
+    margin: 40px 0 20px 0;
+}
+.modal_content div {
+    width: 50%;
+    min-width: 240px;
+    margin: 40px auto;
+    text-align: center;
+}
+.modal_content div button {
+    width: 30%;
+    height: 40px;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+}
+.modal_content div button.js-modal-close {
+    margin-right: calc(10vw / 2);
+    color: #fff;
+    background-color: #59A6F0;
+}
+.modal_content div a button {
+    color: red;
+    background-color: #EEE;
+}
+.modal_content div button.js-modal-close:hover {
+    color: #EEE;
+    background-color: #4888c4;
+}
+.modal_content div a button:hover {
+    background-color: #CCC;
+}

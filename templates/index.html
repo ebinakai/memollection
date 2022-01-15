@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="post" class="wrapper">
+    <header>
+        <h1><a class="on_cursor" href="#">Memollection</a></h1>
+        <a href="/logout"><button id="logout" class="menu_link on_cursor">Logout</button></a>
+    </header>
+
+    <div class="main">
+        <section id="post_area">
+            <dl>
+                {% for post in past_posts %}
+                    {% if post[4] != None %}
+                    <dt><p class="date"><span>{{post[4]}}</span></p></dt>
+                    {% endif %}
+                <dd>
+                    <div  class="{{post[1]}}">
+                        <p id="{{post[0]}}" class="js-edit on_cursor">{{post[2]}}</p>
+                        <div class="menu">
+                            <form action="/{{post[0]}}/edit" class="{{post[0]}} post_edit" method="post">
+                                <textarea name="body" class="msg_txt_edit" wrap="soft"></textarea><br>
+                                <button class="on_cursor edit_cancel">Cancel</button>
+                                <button class="on_cursor delete">Delete</button>
+                                <input type="submit" class="on_cursor edit" name="edit_submit" value="Edit">
+                            </form>
+                        </div>
+                        {% if post[3] != None %}
+                            <br><span class="time">{{post[3]}}</span>
+                        {% endif %}
+                        </div>
+                </dd>
+                {% endfor %}
+            </dl>
+        </section>
+        <form id="post_input" class="clearfix" method="post">
+            <div id="input_left">
+                <textarea name="body" id="post_txt_input" wrap="soft" ></textarea>
+            </div>
+            <div id="input_right">
+                <input class="on_cursor" type="submit" name="post_submit" value="post" id="post_submit">
+            </div>
+        </form>
+    </div>
+
+    <div class="del_modal js-del-modal">
+        <div class="modal_bg js-modal-close"></div>
+        <div class="modal_content">
+            <p>Are you sure you want to delete the post?</p>
+            <div>
+                <button class="js-modal-close on_cursor">cancel</button>
+                <a><button class="on_cursor last_delete">delete</button></a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="/account_clear">&copy;</a>2022 Ebina Kai
+    </footer>
+</div>
+
+<script>
+    window.onload = function() {
+        var target = document.getElementById("post_area");
+        target.scrollTop = target.scrollHeight;
+    };
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    $(function(){
+        $(".js-edit").on("click", function(){
+            var id = $(this).attr('id');
+            var link = '/'+id+'/delete'
+            var select_class = '.menu form.'+id;
+            var this_textarea = select_class+' textarea.msg_txt_edit'
+            $("div.modal_content div a").attr('href', link);
+            $(this_textarea).val($(this).text());
+            $(select_class).fadeIn();
+            $(this).hide();
+        });
+        $(".edit_cancel").on("click", function(){
+            this_class = $(this).parent().attr('class').split(" ")[0]
+            $('.menu form.'+this_class).fadeOut();
+            $('#'+this_class).show();
+            return false;
+        });
+        $(".delete").on("click", function(){
+            $('.js-del-modal').fadeIn();
+            return false;
+        });
+        $('.js-modal-close').on('click',function(){
+            $('.js-del-modal').fadeOut();
+            return false;
+        });
+        $('.post_edit').keydown(function(e){
+            if(e.metaKey == true && e.key == 'Enter' ){
+                $('.post_edit').submit();
+            }
+        });
+
+        $('#post_txt_input, .msg_txt_edit').on('change keyup keydown paste cut click',function(){
+
+            $(this).height(26);
+            pattern = $(this).attr('id') == 'post_txt_input'
+            while ($(this).outerHeight() < this.scrollHeight){
+                $(this).height($(this).height() + 1);
+                if (pattern && $(this).height() > 130){
+                    break;
+                }
+            }
+            if (pattern){
+                var input_margin = 17 + $(this).height() / 2
+                $('#post_submit').css('margin-top', input_margin);
+            }
+        });
+        $('#post_input').keydown(function(e){
+            if(e.metaKey == true && e.key == 'Enter' ){
+                $('#post_input').submit();
+            }
+        });
+    });
+</script>
+{% endblock %}

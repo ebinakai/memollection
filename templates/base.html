@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="EbinaKai">
+    <title>{% block title %}{% endblock %}Memollection</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="icon" href="{{url_for('static', filename='favicon.ico')}}">
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
