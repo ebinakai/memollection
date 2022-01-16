@@ -1,5 +1,5 @@
 import re
-from flask import Flask, Markup, render_template, request, redirect
+from flask import Flask, Markup, render_template, request, redirect, flash
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user
@@ -84,6 +84,7 @@ def index():
     
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    logout_user()
     if request.method == 'POST':
         username = request.form.get('username')
         pw = request.form.get('pw')
@@ -94,9 +95,11 @@ def login():
                 login_user(user)
                 return redirect('/')
             else :
-                return redirect('/404')
+                flash('Incorrect password.')
+            return redirect('/login')
         except :
-            return redirect('/404')
+            flash('Incorrect username.')
+            return redirect('/login')
     else:
         return render_template('login.html')
 
@@ -108,12 +111,22 @@ def signup():
         pw = request.form.get('pw')
         
         if username != '' and pw != '' :
+            user = User.query.filter_by(username=username).first()
+        
+            if user :
+                flash('this username already exists.')
+                return redirect('/signup')
+            
             user = User(username=username, password=generate_password_hash(pw, method='sha256'))
             
             db.session.add(user)
             db.session.commit()
         
-        return redirect('/login')
+            return redirect('/login')
+        else :
+            flash('please setting username and password.')
+            return redirect('/signup')
+            
     else:
         return render_template('signup.html')
 

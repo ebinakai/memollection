@@ -10,11 +10,11 @@
         <section id="post_area">
             <dl>
                 {% for post in past_posts %}
-                    {% if post[4] != None %}
-                    <dt><p class="date"><span>{{post[4]}}</span></p></dt>
-                    {% endif %}
+                {% if post[4] != None %}
+                <dt><p class="date"><span>{{post[4]}}</span></p></dt>
+                {% endif %}
                 <dd>
-                    <div  class="{{post[1]}}">
+                    <div class="{{post[1]}} original_post">
                         <p id="{{post[0]}}" class="js-edit on_cursor">{{post[2]}}</p>
                         <div class="menu">
                             <form action="/{{post[0]}}/edit" class="{{post[0]}} post_edit" method="post">
@@ -93,7 +93,7 @@
         });
         $('.post_edit').keydown(function(e){
             if(e.metaKey == true && e.key == 'Enter' ){
-                $('.post_edit').submit();
+                $('.post_edit.'+$(this).attr('class').split(" ")[0]).submit();
             }
         });
 
