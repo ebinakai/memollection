@@ -1,4 +1,3 @@
-import re
 from flask import Flask, Markup, render_template, request, redirect, flash
 
 from flask_sqlalchemy import SQLAlchemy
@@ -182,3 +181,8 @@ def clear():
         logging.debug('sqlalchemy.orm.exc.UnmappedInstanceError')
   
     return redirect('/')
+
+def main():
+    app.run(debug=True) 
+    
+main()
