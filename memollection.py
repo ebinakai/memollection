@@ -1,4 +1,4 @@
-from flask import Flask, Markup, render_template, request, redirect, flash
+from flask import Flask, Markup, render_template, request, redirect, flash, session
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user
@@ -14,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///memollection.db'
 app.config['SECRET_KEY'] = os.urandom(24)
 db = SQLAlchemy(app)
 logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -22,6 +23,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post = db.Column(db.String(400), nullable=False)
     post_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Tokyo')))
+    author = db.Column(db.String(30))
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,7 +45,7 @@ def unauthorized():
 def index():
     body = request.form.get('body')
     if request.method == 'POST' and body != '' :
-        atcl = Post(post = body, post_at = datetime.now(pytz.timezone('Asia/Tokyo')))
+        atcl = Post(post = body, post_at = datetime.now(pytz.timezone('Asia/Tokyo')), author = session["user"])
         
         db.session.add(atcl)
         db.session.commit()
@@ -51,7 +53,7 @@ def index():
         return redirect('/')
 
     else :
-        past_posts = Post.query.all()
+        past_posts = Post.query.filter(Post.author==session["user"]).all()
         posts_list = []
         date_list = []
         now = datetime.now()
@@ -92,6 +94,8 @@ def login():
             user = User.query.filter_by(username=username).first()
             if check_password_hash(user.password, pw):
                 login_user(user)
+                session.permanent = True
+                session["user"] = username #sessionにuser情報を保存
                 return redirect('/')
             else :
                 flash('Incorrect password.')
@@ -161,6 +165,7 @@ def edit(id):
 @login_required
 def logout():
     logout_user()
+    session.pop("user", None) #削除
     return redirect('/login')
 
 
@@ -182,7 +187,5 @@ def clear():
   
     return redirect('/')
 
-def main():
-    app.run(debug=True) 
-    
-main()
+if __name__ == "__main__":
+      app.run(debug=True)
