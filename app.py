@@ -1,4 +1,5 @@
-from flask import Flask, Markup, render_template, request, redirect, flash, session
+from flask import Flask, render_template, request, redirect, flash, session
+from markupsafe import Markup
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user
@@ -29,7 +30,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(50))
-
+    
 # ログイン機能を使うために必要なコールバック関数
 @login_manager.user_loader
 def load_user(user_id):
@@ -119,8 +120,8 @@ def signup():
             if user :
                 flash('this username already exists.')
                 return redirect('/signup')
-            
-            user = User(username=username, password=generate_password_hash(pw, method='sha256'))
+                
+            user = User(username=username, password=generate_password_hash(pw))
             
             db.session.add(user)
             db.session.commit()
@@ -187,5 +188,11 @@ def clear():
   
     return redirect('/')
 
-if __name__ == "__main__":
-      app.run(debug=True)
+@app.cli.command('init-db')
+def init_db_command():
+    """Clear the existing data and create new tables."""
+    db.create_all()
+    print('Initialized the database.')
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=9999, debug=True)
