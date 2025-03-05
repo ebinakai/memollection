@@ -1,0 +1,44 @@
+services:
+  app:
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "9999:9999"
+    environment:
+      - FLASK_ENV
+      - DATABASE_HOST
+      - DATABASE_USER
+      - DATABASE_PASSWORD
+      - DATABASE_NAME
+      - DATABASE_PORT
+    depends_on:
+      - db
+    networks:
+      - internal
+      - web-network
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
+
+networks:
+  internal:
+  web-network:
+    external: true
