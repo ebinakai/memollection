@@ -39,7 +39,10 @@ class Post(db.Model):
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False, unique=True)
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(255))
+    
+with app.app_context():
+    db.create_all()
     
 @login_manager.user_loader
 def load_user(user_id):
