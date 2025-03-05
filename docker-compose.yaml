@@ -1,0 +1,34 @@
+services:
+  web:
+    build: app/Dockerfile
+    ports:
+      - "9999:9999"
+    environment:
+      - FLASK_ENV
+      - DATABASE_HOST
+      - DATABASE_USER
+      - DATABASE_PASSWORD
+      - DATABASE_NAME
+      - DATABASE_PORT
+    networks:
+      - internal
+      - web-network
+
+  db:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal
+
+volumes:
+  db_data:
+
+networks:
+  internal:
+  web-network:
+    external: true

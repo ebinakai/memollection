@@ -3,3 +3,4 @@ env/
 memollection.db
 *.pyc
 run_gevent.py
+__pycache__

@@ -1,17 +1,27 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, flash, session
 from markupsafe import Markup
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user
-
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 import pytz
-import os
 import logging
 
+# .envファイルを読み込む
+load_dotenv()
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///memollection.db'
+
+# 環境変数からMySQL接続情報を取得する
+db_host = os.environ.get('DATABASE_HOST', 'db')
+db_user = os.environ.get('DATABASE_USER', 'root')
+db_password = os.environ.get('DATABASE_PASSWORD', 'example')
+db_name = os.environ.get('DATABASE_NAME', 'memollection')
+db_port = os.environ.get('DATABASE_PORT', '3306')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 app.config['SECRET_KEY'] = os.urandom(24)
 db = SQLAlchemy(app)
 logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
@@ -31,12 +41,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(50))
     
-# ログイン機能を使うために必要なコールバック関数
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# ログインしていないときはログインページに飛ばす
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect('/login')
