@@ -9,5 +9,11 @@ Flaskで初めて作ったWebアプリケーション。チャット形式でメ
 ## セットアップ
 
 ```bash
-docker-compose up -d --build
+docker build ./app -t memollection-app
+
+# 初回のみ
+kubectl apply -f db-secret.yaml
+kubectl apply -f mysql-pv.yaml
+kubectl apply -f mysql-statefulset.yaml
+kubectl apply -f app-deployment.yaml
 ```

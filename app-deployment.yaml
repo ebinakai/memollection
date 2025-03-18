@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+        - name: flask-app
+          image: registory.srv.lan/memollection_app:latest
+          imagePullPolicy: Always # イメージPullポリシーを明示的に指定
+          ports:
+            - containerPort: 80
+          env:
+            - name: FLASK_ENV
+              value: "production"
+            - name: DATABASE_HOST
+              value: "mysql-db"
+            - name: DATABASE_USER
+              value: "root"
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
+            - name: DATABASE_NAME
+              value: "memollection"
+            - name: DATABASE_PORT
+              value: "3306"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-svc
+spec:
+  selector:
+    app: flask-app
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 9999
+      nodePort: 30080
