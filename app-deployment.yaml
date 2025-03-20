@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app
+  name: memollection-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask-app
+      app: memollection-app
   template:
     metadata:
       labels:
-        app: flask-app
+        app: memollection-app
     spec:
       containers:
-        - name: flask-app
+        - name: memollection-app
           image: registory.srv.lan/memollection_app:latest
           imagePullPolicy: Always # イメージPullポリシーを明示的に指定
           ports:
@@ -45,12 +45,30 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-app-svc
+  name: memollection-app-svc
 spec:
   selector:
-    app: flask-app
-  type: NodePort
+    app: memollection-app
+  type: ClusterIP
   ports:
     - port: 80
       targetPort: 9999
-      nodePort: 30080
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: memollection-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: memollection.kb
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: memollection-app-svc
+            port:
+              number: 80
