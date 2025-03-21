@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: memollection-app
-          image: registory.srv.lan/memollection_app:latest
+          image: registry.kb/memollection_app:latest
           imagePullPolicy: Always # イメージPullポリシーを明示的に指定
           ports:
             - containerPort: 80
@@ -61,14 +61,19 @@ metadata:
   name: memollection-ingress
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - memollection.kb
+      secretName: memollection-tls
   rules:
-  - host: memollection.kb
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: memollection-app-svc
-            port:
-              number: 80
+    - host: memollection.kb
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: memollection-app-svc
+                port:
+                  number: 80
+                                
