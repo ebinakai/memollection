@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: memollection-app
-          image: registry.kb/memollection_app:latest
-          imagePullPolicy: Always # イメージPullポリシーを明示的に指定
+          image: registry.kb/memollection/app:1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
