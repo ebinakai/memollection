@@ -24,14 +24,20 @@ spec:
             - name: DATABASE_HOST
               value: "mysql-db"
             - name: DATABASE_USER
-              value: "root"
+              valueFrom:
+                secretKeyRef:
+                  name: memollection-db-secret
+                  key: username
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: memollection-db-secret
                   key: password
             - name: DATABASE_NAME
-              value: "memollection"
+              valueFrom:
+                secretKeyRef:
+                  name: memollection-db-secret
+                  key: database
             - name: DATABASE_PORT
               value: "3306"
           resources:
