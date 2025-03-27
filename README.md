@@ -13,5 +13,5 @@ docker build ./app -t memollection/app:1.0.0
 docker tag memollection/app:1.0.0 registry.kb/memollection/app:1.0.0
 
 # 初回のみ
-kubectl apply -f app-deployment.yaml
+kubectl apply -f deployment.yaml
 ```
