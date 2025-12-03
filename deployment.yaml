@@ -69,10 +69,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - memollection.kb
-      secretName: memollection-tls
+        - memollection.kube.internal
+      secretName: default-tls
   rules:
-    - host: memollection.kb
+    - host: memollection.kube.internal
       http:
         paths:
           - path: /

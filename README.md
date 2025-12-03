@@ -9,8 +9,8 @@ Flaskで初めて作ったWebアプリケーション。チャット形式でメ
 ## セットアップ
 
 ```bash
-docker build ./app -t memollection/app:1.0.0
-docker tag memollection/app:1.0.0 registry.kb/memollection/app:1.0.0
+docker build ./app -t registry.kb/memollection/app:1.0.0
+docker push registry.kb/memollection/app:1.0.0
 
 # 初回のみ
 kubectl apply -f deployment.yaml
